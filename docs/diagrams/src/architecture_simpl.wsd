@@ -63,6 +63,7 @@ together {
     }
 
     Tag <|-- SourceTag
+    Tag <|-- ContainsTag
     Tag <|-- AiTag
 }
 
@@ -83,8 +84,8 @@ together {
 
     FeedRule <|-- InclueTagRule
     FeedRule <|-- ExcludeTagRule
-    FeedRule <|-- IncludeContentRule
-    FeedRule <|-- ExcludeContentRule
+    'FeedRule <|-- IncludeContentRule
+    'FeedRule <|-- ExcludeContentRule
 }
 
 Source <- Content
