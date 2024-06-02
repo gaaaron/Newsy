@@ -1,0 +1,93 @@
+@startuml System design
+
+skinparam nodesep 50
+skinparam groupInheritance 3
+hide empty members
+
+
+'Source
+together {
+    SourceFolder "parent" .. SourceFolder
+    SourceFolder <- Source
+
+    Source <|-- RssSource
+    Source <|-- FacebookSource
+
+    class SourceFolder {
+        Guid Id
+        Guid ParentId
+        String Name
+    }
+
+    abstract class Source {
+        Guid Id
+        Guid SourceFolderId
+        String Name
+    }
+
+    class RssSource {
+        String RssUrl
+    }
+
+    class FacebookSource {
+        String FacebookUrl
+    }
+}
+
+'Content
+together {
+    abstract class Content {
+        Guid Id
+        Guid SourceId
+        String ConcreteSource
+    }
+
+    Content <|-- RssContent
+    Content <|-- FacebookContent
+}
+
+'Tags
+together {
+    Content "*" --- "*" Tag
+    (Content, Tag) .. ContentTag
+
+    abstract class Tag {
+        Guid Id
+        String Name
+        ContentTag? Attach(News news)
+    }
+
+    class ContentTag {
+        Guid ContentId
+        Guid TagId
+    }
+
+    Tag <|-- SourceTag
+    Tag <|-- AiTag
+}
+
+'Feed
+together {
+    Feed "1" *-- "*" FeedRule
+
+    class Feed {
+        Guid Id
+        String Name
+        String Visibility
+    }
+
+    abstract class FeedRule {
+        Guid Id
+        String Name
+    }
+
+    FeedRule <|-- InclueTagRule
+    FeedRule <|-- ExcludeTagRule
+    FeedRule <|-- IncludeContentRule
+    FeedRule <|-- ExcludeContentRule
+}
+
+Source <- Content
+Content .r. Feed
+
+@enduml

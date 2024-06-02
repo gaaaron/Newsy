@@ -1,0 +1,148 @@
+@startuml System design
+
+skinparam nodesep 50
+skinparam groupInheritance 3
+hide empty members
+
+class NewsySytem
+
+class NewsRoom {
+    Guid Id
+    String Name
+}
+
+NewsySytem "1" *-- "*" NewsRoom
+
+'Source
+together {
+    NewsRoom "0..1" *-- "*" SourceFolder
+    SourceFolder "parent" .. SourceFolder
+
+    NewsySytem "1" *-- "*" Source
+    NewsRoom "*" -- "*" Source
+    (NewsRoom, Source) .. NrSource
+
+    SourceFolder <- NrSource
+
+    Source <|-- RssSource
+    Source <|-- FacebookSource
+
+    class SourceFolder {
+        Guid Id
+        Guid NewsRoomId
+        Guid ParentId
+        String Name
+    }
+
+    class NrSource {
+        Guid Id
+        Guid NewsRoomId
+        Guid SourceFolderId
+        Guid SourceId
+        String Name
+    }
+
+    abstract class Source {
+        Guid Id
+    }
+
+    class RssSource {
+        String RssUrl
+    }
+
+    class FacebookSource {
+        String FacebookUrl
+    }
+}
+
+'Content
+together {
+    NewsySytem "1" *-- "*" Content
+    NewsRoom "*" -- "*" Content
+    (NewsRoom, Content) .. NrContent
+
+    class NrContent {
+        Guid Id
+        Guid NewsRoomId
+        Guid ContentId
+        Guid NrSourceId
+    }
+
+    abstract class Content {
+        Guid Id
+        Guid SourceId
+        String ConcreteSource
+    }
+
+    Content <|-- TextContent
+    Content <|-- ImageContent
+    Content <|-- HtmlContent
+    Content <|-- CommentSectionContent
+}
+
+'Tags
+together {
+    NewsRoom "0..1" *--- "*" Tag
+    NrContent "*" --- "*" Tag
+    (NrContent, Tag) .. ContentTag
+
+    abstract class Tag {
+        Guid Id
+        Guid NewsRoomId
+        String Name
+        ContentTag? Attach(News news)
+    }
+
+    class ContentTag {
+        Guid NrContentId
+        Guid TagId
+    }
+
+    Tag <|-- SourceTag
+    Tag <|-- AiTag
+}
+
+'User
+together {
+    NewsRoom *---- NrUser
+    NewsRoom *---- Feed
+
+    NrUser - Feed 
+    (Feed, NrUser) .. NrUserFeed
+
+    Feed "1" *-- "*" FeedRule
+
+    class NrUser {
+        Guid Id
+        String Name
+    }
+
+    class Feed {
+        Guid Id
+        String Name
+        String Visibility
+    }
+
+    class NrUserFeed {
+        Guid NrUserId
+        Guid FeedId
+        String Role
+    }
+
+    abstract class FeedRule {
+        Guid Id
+        String Name
+    }
+
+    FeedRule <|-- InclueTagRule
+    FeedRule <|-- ExcludeTagRule
+    FeedRule <|-- IncludeNrContentRule
+    FeedRule <|-- ExcludeNrContentRule
+}
+
+
+NrSource <- NrContent
+Source <- Content
+NrContent .r. Feed
+
+@enduml
