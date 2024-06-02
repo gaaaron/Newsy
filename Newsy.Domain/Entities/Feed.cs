@@ -20,26 +20,26 @@ public class Feed(Guid Id, string Name) : Entity(Id)
 
     public void UpdateRules(List<Guid> includeTags, List<Guid> excludeTags)
     {
-        var oldIncludeTags = Rules.OfType<IncludeTagRule>().ToList();
-        var oldExcludeTags = Rules.OfType<ExcludeTagRule>().ToList();
+        var prevIncludeTags = Rules.OfType<IncludeTagRule>().ToList();
+        var prevExcludeTags = Rules.OfType<ExcludeTagRule>().ToList();
 
-        var toRemove1 = oldIncludeTags.Where(x => !includeTags.Contains(x.Id));
-        var toRemove2 = oldExcludeTags.Where(y => !excludeTags.Contains(y.Id));
+        var prevInclToRemove = prevIncludeTags.Where(x => !includeTags.Contains(x.Id));
+        var prevExclToRemove = prevExcludeTags.Where(y => !excludeTags.Contains(y.Id));
 
-        var toAdd1 = includeTags.Where(x => !oldIncludeTags.Select(t => t.Id).Contains(x))
-                                .Select(x => new IncludeTagRule(Guid.NewGuid(), Id, x));
+        var inclToAdd = includeTags.Where(x => !prevIncludeTags.Select(t => t.Id).Contains(x))
+                                   .Select(x => new IncludeTagRule(Guid.NewGuid(), Id, x));
 
-        var toAdd2 = excludeTags.Where(x => !oldExcludeTags.Select(t => t.Id).Contains(x))
-                                .Select(x => new ExcludeTagRule(Guid.NewGuid(), Id, x));
+        var exclToAdd = excludeTags.Where(x => !prevExcludeTags.Select(t => t.Id).Contains(x))
+                                   .Select(x => new ExcludeTagRule(Guid.NewGuid(), Id, x));
 
-        Rules.RemoveAll(x => toRemove1.Contains(x) || toRemove2.Contains(x));
+        Rules.RemoveAll(x => prevInclToRemove.Contains(x) || prevExclToRemove.Contains(x));
 
-        foreach (var item in toAdd1)
+        foreach (var item in inclToAdd)
         {
             Rules.Add(item);
         }
 
-        foreach (var item in toAdd2)
+        foreach (var item in exclToAdd)
         {
             Rules.Add(item);
         }
