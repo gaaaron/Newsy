@@ -1,0 +1,35 @@
+@if(feedDetails$ | async; as feedDetails){
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">{{feedDetails.feedName}}</h1>
+
+    <div class="btn-toolbar mb-2 mb-md-0">
+
+        <app-feed-tag-popup [id]="id!" (tagsUpdated)="refresh()" />
+
+        <button type="button" class="btn btn-outline-danger btn-sm py-0" (click)="remove(id!)">
+            <i class="bi bi-trash"></i>
+            Remove
+        </button>
+    </div>
+</div>
+
+@for (feedContent of feedDetails.contents; track $index) {
+<div class="card my-4">
+    <div class="card-header d-flex justify-content-between">
+        <a class="card-link text-break feed-link" target="_blank" [href]="feedContent.concreteSource">{{
+            feedContent.concreteSource }}</a>
+        <span>{{ feedContent.published | date:'medium' }}</span>
+    </div>
+    <div class="card-body">
+        <h5 class="card-title text-break">{{ feedContent.title }}</h5>
+        <p class="card-text text-break" [innerHTML]="feedContent.description"></p>
+    </div>
+    <div class="card-footer text-body-secondary">
+        @for (tag of feedContent.tags.split(','); track $index) {
+        <span class="badge text-bg-secondary">{{ tag }}</span>
+        }
+    </div>
+</div>
+}
+
+}

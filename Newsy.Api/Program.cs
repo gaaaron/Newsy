@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Newsy.Api.Infrastructure;
 using Newsy.Application;
 using Newsy.Infrastructure;
@@ -11,25 +12,16 @@ public class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.Services.AddCors(
-            options => options.AddDefaultPolicy(
-                policy => policy.WithOrigins([builder.Configuration["BackendUrl"] ?? "https://localhost:5001",
-        builder.Configuration["FrontendUrl"] ?? "https://localhost:5002"])
-                    .AllowAnyMethod()
-                    .AllowAnyHeader()));
-
-        builder.Services.AddControllers().AddJsonOptions(x =>
+        builder.Services.AddControllers(x =>
+        {
+            x.OutputFormatters.RemoveType<StringOutputFormatter>();
+        }).AddJsonOptions(x => 
         {
             x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
         });
 
-
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen(c =>
-        {
-            //c.SchemaFilter<ExampleSchemaFilter>();
-        });
-
+        builder.Services.AddSwaggerGen();
 
         builder.Services.AddExceptionHandler<CustomExceptionHandler>();
 
@@ -51,7 +43,6 @@ public class Program
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
-
 
         app.MapControllers();
 

@@ -8,7 +8,11 @@ internal class ContentConfiguration : IEntityTypeConfiguration<Content>
 {
     public void Configure(EntityTypeBuilder<Content> builder)
     {
-        builder.HasOne(x => x.Source).WithMany(x => x.Contents).HasForeignKey(x => x.SourceId).IsRequired(false);
+        builder.HasOne(x => x.Source)
+               .WithMany(x => x.Contents)
+               .HasForeignKey(x => x.SourceId)
+               .IsRequired(false)
+               .OnDelete(DeleteBehavior.SetNull);
     }
 }
 

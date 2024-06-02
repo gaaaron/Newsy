@@ -4,17 +4,23 @@ namespace Newsy.Domain.Abstractions;
 
 public interface INewsySystemRepository
 {
-    RssSource? GetRssSource(string rssUrl);
+    // SOURCE
+    RssSource? GetRssSourceByUrl(string rssUrl);
     RssSource? GetRssSourceById(Guid sourceId);
-    Source? GetSource(Guid sourceId);
+    void DeleteSource(Guid id);
+    SourceFolder? GetDefaultFolder();
 
-    FacebookSource? GetFacebookSource(string facebookUrl);
-    FacebookSource? GetFacebookSourceById(Guid sourceId);
-    IEnumerable<Source> GetSourcesBySourceId(Guid sourceId);
-    void Insert(Source newsSource);
-    void InsertContents(IEnumerable<Content> content);
+    // CONTENT
     IEnumerable<Content> GetContentsByIds(List<Guid> contentIds);
-    void InsertSourceTag(SourceTag tag);
+
+    // TAG
+    IEnumerable<Tag> GetAllTags();
     SourceTag? GetSourceTagBySourceId(Guid sourceId);
-    SourceFolder? GetSourceFolder(Guid folderId);
+    void InsertSourceTag(SourceTag tag);
+
+    // FEED
+    Feed? GetFeedByName(string name);
+    Feed? GetFeedById(Guid feedId);
+    void InsertFeed(Feed feed);
+    void DeleteFeed(Guid feedId);
 }

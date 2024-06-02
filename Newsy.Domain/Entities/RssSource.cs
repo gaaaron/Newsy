@@ -10,6 +10,11 @@ public class RssSource(Guid Id, string Name, Guid SourceFolderId, RssUrl RssUrl,
 
     public void AddContent(IEnumerable<RssScrapeData> items)
     {
+        if (items.Count() == 0)
+        {
+            return;
+        }
+
         var ids = new List<Guid>();
         foreach (var item in items)
         {
@@ -21,6 +26,13 @@ public class RssSource(Guid Id, string Name, Guid SourceFolderId, RssUrl RssUrl,
 
         LastScraped = DateTime.Now;
         RaiseDomainEvent(new ContentCreatedEvent(Id, ids));
+    }
+
+    public void Update(string name, string rssUrl)
+    {
+        Name = name;
+        RssUrl = RssUrl.Create(rssUrl);
+        RaiseDomainEvent(new SourceUpdatedEvent(Id, Name));
     }
 }
 

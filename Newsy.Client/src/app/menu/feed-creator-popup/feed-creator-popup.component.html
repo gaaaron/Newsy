@@ -1,0 +1,21 @@
+<ng-template #create let-modal>
+    <div class="modal-header">
+        <h4 class="modal-title" id="modal-basic-title">Create new Feed</h4>
+        <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('Cross click')"></button>
+    </div>
+    <div class="modal-body">
+        <form>
+            <div class="mb-3">
+                <label for="feedName">Name</label>
+                <input id="feedName" name="sourceName" class="form-control" type="text" [(ngModel)]="name"  />
+            </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-dark" (click)="modal.close('Save click')">Save</button>
+    </div>
+</ng-template>
+
+<a class="link-secondary" aria-label="Add a new feed" (click)="open(create)">
+    <i class="bi bi-plus-circle"></i>
+</a>

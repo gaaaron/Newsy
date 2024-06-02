@@ -1,32 +1,16 @@
-﻿using Newsy.Domain.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using Newsy.Domain.Abstractions;
 using Newsy.Domain.Entities;
+using Newsy.Domain.ValueObjects;
 
 namespace Newsy.Infrastructure.Data.Repositories;
 
 internal class NewsySystemRepository(ApplicationDbContext applicationDbContext) : INewsySystemRepository
 {
-    public RssSource? GetRssSource(string rssUrl)
+    public RssSource? GetRssSourceByUrl(string rssUrl)
     {
-        return applicationDbContext.Set<RssSource>().FirstOrDefault(x => x.RssUrl.Value == rssUrl);
-    }
-
-    public FacebookSource? GetFacebookSource(string facebookUrl)
-    {
-        return applicationDbContext.Set<FacebookSource>().FirstOrDefault(x => x.FacebookUrl.Value == facebookUrl);
-    }
-    public Source? GetSource(Guid sourceId)
-    {
-        return applicationDbContext.Sources.FirstOrDefault(x => x.Id == sourceId);
-    }
-
-    public void InsertSourceTag(SourceTag tag)
-    {
-        applicationDbContext.Tags.Add(tag);
-    }
-
-    public void Insert(Source newsSource)
-    {
-        applicationDbContext.Sources.Add(newsSource);
+        var url = RssUrl.Create(rssUrl)!;
+        return applicationDbContext.Set<RssSource>().FirstOrDefault(x => x.RssUrl == url);
     }
 
     public RssSource? GetRssSourceById(Guid sourceId)
@@ -34,19 +18,28 @@ internal class NewsySystemRepository(ApplicationDbContext applicationDbContext) 
         return applicationDbContext.Set<RssSource>().FirstOrDefault(x => x.Id == sourceId);
     }
 
-    public FacebookSource? GetFacebookSourceById(Guid sourceId)
+    public void DeleteSource(Guid id)
     {
-        return applicationDbContext.Set<FacebookSource>().FirstOrDefault(x => x.Id == sourceId);
+        var source = applicationDbContext.Sources.Include(x => x.Contents).FirstOrDefault(x => x.Id == id);
+        if (source is null)
+            return;
+
+        foreach (var content in source.Contents)
+        {
+            applicationDbContext.Contents.Remove(content);
+        }
+        applicationDbContext.Sources.Remove(source);
+
+        var tag = applicationDbContext.Tags.OfType<SourceTag>().FirstOrDefault(x => x.SourceId == id);
+        if (tag is null)
+            return;
+
+        applicationDbContext.Tags.Remove(tag);
     }
 
-    public IEnumerable<Source> GetSourcesBySourceId(Guid sourceId)
+    public SourceFolder? GetDefaultFolder()
     {
-        return applicationDbContext.Sources.Where(x => x.Id == sourceId);
-    }
-
-    public void InsertContents(IEnumerable<Content> content)
-    {
-        applicationDbContext.Contents.AddRange(content);
+        return applicationDbContext.SourceFolders.FirstOrDefault();
     }
 
     public IEnumerable<Content> GetContentsByIds(List<Guid> contentIds)
@@ -56,13 +49,43 @@ internal class NewsySystemRepository(ApplicationDbContext applicationDbContext) 
         return contents;
     }
 
+    public IEnumerable<Tag> GetAllTags()
+    {
+        return applicationDbContext.Tags.ToList();
+    }
+
     public SourceTag? GetSourceTagBySourceId(Guid sourceId)
     {
         return applicationDbContext.Tags.OfType<SourceTag>().FirstOrDefault(x => x.SourceId == sourceId);
     }
 
-    public SourceFolder? GetSourceFolder(Guid folderId)
+    public void InsertSourceTag(SourceTag tag)
     {
-        return applicationDbContext.SourceFolders.FirstOrDefault(x => x.Id == folderId);
+        applicationDbContext.Tags.Add(tag);
+    }
+
+    public Feed? GetFeedByName(string name)
+    {
+        return applicationDbContext.Feeds.Include(x => x.Rules).FirstOrDefault(x => x.Name == name);
+    }
+
+    public Feed? GetFeedById(Guid feedId)
+    {
+        return applicationDbContext.Feeds.Include(x => x.Rules).FirstOrDefault(x => x.Id == feedId);
+    }
+
+    public void InsertFeed(Feed feed)
+    {
+        applicationDbContext.Feeds.Add(feed);
+    }
+
+    public void DeleteFeed(Guid feedId)
+    {
+        var feed = applicationDbContext.Feeds.FirstOrDefault(x => x.Id == feedId);
+        if (feed is null)
+            return;
+
+        feed.Rules.Clear();
+        applicationDbContext.Feeds.Remove(feed);
     }
 }

@@ -54,7 +54,7 @@ internal class ScrapeRssCommandHandler(INewsySystemRepository newsySystemReposit
                         return scrapeData;
 
                     var link = item.Links.FirstOrDefault()?.Uri.ToString() ?? string.Empty;
-                    scrapeData.Add(new RssScrapeData(item.Id, item.Title, item.Description, link, item.Published.DateTime));
+                    scrapeData.Add(new RssScrapeData(item.Id, item.Title, item.Description ?? string.Empty, link, item.Published.DateTime));
                     break;
 
                     //// Read link

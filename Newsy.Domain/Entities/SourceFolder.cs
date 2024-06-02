@@ -24,7 +24,7 @@ public class SourceFolder(Guid Id, Guid? ParentId, string Name) : Entity(Id)
         var source = new RssSource(Guid.NewGuid(), Name, Id, ValueObjects.RssUrl.Create(RssUrl), DateTime.Today.AddDays(-1));
         Sources.Add(source);
 
-        RaiseDomainEvent(new SourceCreatedEvent(Id, Name));
+        RaiseDomainEvent(new SourceCreatedEvent(source.Id, Name));
         return source.Id;
     }
 }

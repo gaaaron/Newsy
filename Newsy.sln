@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Newsy.ClientBlazor", "Newsy.ClientBlazor\Newsy.ClientBlazor.csproj", "{DF6F1031-AC39-42CA-A97D-9E4D24716484}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Newsy.Api", "Newsy.Api\Newsy.Api.csproj", "{71D4513E-F32E-4E3D-992F-53413EB29C41}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Newsy.Domain", "Newsy.Domain\Newsy.Domain.csproj", "{E73A8B1D-9924-4C70-A640-7A1C3E6991D0}"
@@ -23,10 +21,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{DF6F1031-AC39-42CA-A97D-9E4D24716484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DF6F1031-AC39-42CA-A97D-9E4D24716484}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DF6F1031-AC39-42CA-A97D-9E4D24716484}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DF6F1031-AC39-42CA-A97D-9E4D24716484}.Release|Any CPU.Build.0 = Release|Any CPU
 		{71D4513E-F32E-4E3D-992F-53413EB29C41}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{71D4513E-F32E-4E3D-992F-53413EB29C41}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{71D4513E-F32E-4E3D-992F-53413EB29C41}.Release|Any CPU.ActiveCfg = Release|Any CPU

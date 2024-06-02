@@ -24,17 +24,6 @@ internal class RssNewsSourceConfiguration : IEntityTypeConfiguration<RssSource>
     }
 }
 
-//internal class FacebookNewsSourceConfiguration : IEntityTypeConfiguration<FacebookSource>
-//{
-//    public void Configure(EntityTypeBuilder<FacebookSource> builder)
-//    {
-//        builder.HasBaseType<Source>();
-//        builder.Property(x => x.FacebookUrl).HasConversion(
-//            url => url.Value,
-//            value => FacebookUrl.Create(value)!);
-//    }
-//}
-
 internal class SourceFolderConfiguration : IEntityTypeConfiguration<SourceFolder>
 {
     public void Configure(EntityTypeBuilder<SourceFolder> builder)

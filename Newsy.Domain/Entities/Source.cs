@@ -1,5 +1,4 @@
-﻿using Newsy.Domain.DomainEvents;
-using Newsy.Domain.Primitives;
+﻿using Newsy.Domain.Primitives;
 using Newsy.Domain.ValueObjects;
 
 namespace Newsy.Domain.Entities;
@@ -14,7 +13,7 @@ public abstract class Source : Entity
         SourceFolderId = sourceFolderId;
     }
 
-    public string Name { get; init; }
+    public string Name { get; set; }
     public DateTime? LastScraped { get; set; }
 
     public List<Content> Contents { get; set; } = [];

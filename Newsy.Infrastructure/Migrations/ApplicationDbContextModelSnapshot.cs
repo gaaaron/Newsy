@@ -37,7 +37,43 @@ namespace Newsy.Infrastructure.Migrations
                     b.ToTable("ContentTags");
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.Feed", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.Content", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ConcreteSource")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
+                    b.Property<string>("ExternalId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Published")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("SourceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SourceId");
+
+                    b.ToTable("Contents");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Content");
+
+                    b.UseTphMappingStrategy();
+                });
+
+            modelBuilder.Entity("Newsy.Domain.Entities.Feed", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -52,7 +88,7 @@ namespace Newsy.Infrastructure.Migrations
                     b.ToTable("Feeds");
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.FeedRule", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.FeedRule", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -77,87 +113,7 @@ namespace Newsy.Infrastructure.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.SourceFolder", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("ParentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ParentId");
-
-                    b.ToTable("SourceFolders");
-                });
-
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.Tag", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tags");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Tag");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Newsy.Domain.Entities.System.Content", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ConcreteSource")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
-                    b.Property<string>("ExternalId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("Published")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("SourceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("SourceId");
-
-                    b.ToTable("Contents");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Content");
-
-                    b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Newsy.Domain.Entities.System.Source", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.Source", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -189,75 +145,53 @@ namespace Newsy.Infrastructure.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.ExcludeContentRule", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.SourceFolder", b =>
                 {
-                    b.HasBaseType("Newsy.Domain.Entities.Room.FeedRule");
-
-                    b.Property<Guid>("ContentId")
-                        .ValueGeneratedOnUpdateSometimes()
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("ContentId");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.HasDiscriminator().HasValue("ExcludeContentRule");
-                });
-
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.ExcludeTagRule", b =>
-                {
-                    b.HasBaseType("Newsy.Domain.Entities.Room.FeedRule");
-
-                    b.Property<Guid>("TagId")
-                        .ValueGeneratedOnUpdateSometimes()
+                    b.Property<Guid?>("ParentId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("TagId");
+                    b.HasKey("Id");
 
-                    b.HasDiscriminator().HasValue("ExcludeTagRule");
+                    b.HasIndex("ParentId");
+
+                    b.ToTable("SourceFolders");
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.IncludeContentRule", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.Tag", b =>
                 {
-                    b.HasBaseType("Newsy.Domain.Entities.Room.FeedRule");
-
-                    b.Property<Guid>("ContentId")
-                        .ValueGeneratedOnUpdateSometimes()
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("ContentId");
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
 
-                    b.HasDiscriminator().HasValue("IncludeContentRule");
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tags");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Tag");
+
+                    b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.IncludeTagRule", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.RssContent", b =>
                 {
-                    b.HasBaseType("Newsy.Domain.Entities.Room.FeedRule");
-
-                    b.Property<Guid>("TagId")
-                        .ValueGeneratedOnUpdateSometimes()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("TagId");
-
-                    b.HasDiscriminator().HasValue("IncludeTagRule");
-                });
-
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.SourceTag", b =>
-                {
-                    b.HasBaseType("Newsy.Domain.Entities.Room.Tag");
-
-                    b.Property<Guid>("SourceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasIndex("SourceId")
-                        .IsUnique()
-                        .HasFilter("[SourceId] IS NOT NULL");
-
-                    b.HasDiscriminator().HasValue("SourceTag");
-                });
-
-            modelBuilder.Entity("Newsy.Domain.Entities.System.RssContent", b =>
-                {
-                    b.HasBaseType("Newsy.Domain.Entities.System.Content");
+                    b.HasBaseType("Newsy.Domain.Entities.Content");
 
                     b.Property<string>("Description")
                         .IsRequired()
@@ -270,9 +204,35 @@ namespace Newsy.Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("RssContent");
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.System.RssSource", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.ExcludeTagRule", b =>
                 {
-                    b.HasBaseType("Newsy.Domain.Entities.System.Source");
+                    b.HasBaseType("Newsy.Domain.Entities.FeedRule");
+
+                    b.Property<Guid>("TagId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("TagId");
+
+                    b.HasDiscriminator().HasValue("ExcludeTagRule");
+                });
+
+            modelBuilder.Entity("Newsy.Domain.Entities.IncludeTagRule", b =>
+                {
+                    b.HasBaseType("Newsy.Domain.Entities.FeedRule");
+
+                    b.Property<Guid>("TagId")
+                        .ValueGeneratedOnUpdateSometimes()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("TagId");
+
+                    b.HasDiscriminator().HasValue("IncludeTagRule");
+                });
+
+            modelBuilder.Entity("Newsy.Domain.Entities.RssSource", b =>
+                {
+                    b.HasBaseType("Newsy.Domain.Entities.Source");
 
                     b.Property<string>("RssUrl")
                         .IsRequired()
@@ -281,117 +241,117 @@ namespace Newsy.Infrastructure.Migrations
                     b.HasDiscriminator().HasValue("RssSource");
                 });
 
+            modelBuilder.Entity("Newsy.Domain.Entities.SourceTag", b =>
+                {
+                    b.HasBaseType("Newsy.Domain.Entities.Tag");
+
+                    b.Property<Guid>("SourceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasIndex("SourceId")
+                        .IsUnique()
+                        .HasFilter("[SourceId] IS NOT NULL");
+
+                    b.HasDiscriminator().HasValue("SourceTag");
+                });
+
             modelBuilder.Entity("ContentTags", b =>
                 {
-                    b.HasOne("Newsy.Domain.Entities.System.Content", null)
+                    b.HasOne("Newsy.Domain.Entities.Content", null)
                         .WithMany()
                         .HasForeignKey("ContentsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Newsy.Domain.Entities.Room.Tag", null)
+                    b.HasOne("Newsy.Domain.Entities.Tag", null)
                         .WithMany()
                         .HasForeignKey("TagsId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.FeedRule", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.Content", b =>
                 {
-                    b.HasOne("Newsy.Domain.Entities.Room.Feed", "Feed")
-                        .WithMany("Rules")
-                        .HasForeignKey("FeedId");
-
-                    b.Navigation("Feed");
-                });
-
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.SourceFolder", b =>
-                {
-                    b.HasOne("Newsy.Domain.Entities.Room.SourceFolder", "Parent")
-                        .WithMany()
-                        .HasForeignKey("ParentId");
-
-                    b.Navigation("Parent");
-                });
-
-            modelBuilder.Entity("Newsy.Domain.Entities.System.Content", b =>
-                {
-                    b.HasOne("Newsy.Domain.Entities.System.Source", "Source")
+                    b.HasOne("Newsy.Domain.Entities.Source", "Source")
                         .WithMany("Contents")
-                        .HasForeignKey("SourceId");
+                        .HasForeignKey("SourceId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("Source");
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.System.Source", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.FeedRule", b =>
                 {
-                    b.HasOne("Newsy.Domain.Entities.Room.SourceFolder", "SourceFolder")
+                    b.HasOne("Newsy.Domain.Entities.Feed", "Feed")
+                        .WithMany("Rules")
+                        .HasForeignKey("FeedId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.Navigation("Feed");
+                });
+
+            modelBuilder.Entity("Newsy.Domain.Entities.Source", b =>
+                {
+                    b.HasOne("Newsy.Domain.Entities.SourceFolder", "SourceFolder")
                         .WithMany("Sources")
                         .HasForeignKey("SourceFolderId");
 
                     b.Navigation("SourceFolder");
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.ExcludeContentRule", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.SourceFolder", b =>
                 {
-                    b.HasOne("Newsy.Domain.Entities.System.Content", "Content")
+                    b.HasOne("Newsy.Domain.Entities.SourceFolder", "Parent")
                         .WithMany()
-                        .HasForeignKey("ContentId");
+                        .HasForeignKey("ParentId");
 
-                    b.Navigation("Content");
+                    b.Navigation("Parent");
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.ExcludeTagRule", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.ExcludeTagRule", b =>
                 {
-                    b.HasOne("Newsy.Domain.Entities.Room.Tag", "Tag")
+                    b.HasOne("Newsy.Domain.Entities.Tag", "Tag")
                         .WithMany()
-                        .HasForeignKey("TagId");
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Tag");
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.IncludeContentRule", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.IncludeTagRule", b =>
                 {
-                    b.HasOne("Newsy.Domain.Entities.System.Content", "Content")
+                    b.HasOne("Newsy.Domain.Entities.Tag", "Tag")
                         .WithMany()
-                        .HasForeignKey("ContentId");
-
-                    b.Navigation("Content");
-                });
-
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.IncludeTagRule", b =>
-                {
-                    b.HasOne("Newsy.Domain.Entities.Room.Tag", "Tag")
-                        .WithMany()
-                        .HasForeignKey("TagId");
+                        .HasForeignKey("TagId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("Tag");
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.SourceTag", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.SourceTag", b =>
                 {
-                    b.HasOne("Newsy.Domain.Entities.System.Source", "Source")
+                    b.HasOne("Newsy.Domain.Entities.Source", "Source")
                         .WithOne()
-                        .HasForeignKey("Newsy.Domain.Entities.Room.SourceTag", "SourceId")
+                        .HasForeignKey("Newsy.Domain.Entities.SourceTag", "SourceId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Source");
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.Feed", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.Feed", b =>
                 {
                     b.Navigation("Rules");
                 });
 
-            modelBuilder.Entity("Newsy.Domain.Entities.Room.SourceFolder", b =>
-                {
-                    b.Navigation("Sources");
-                });
-
-            modelBuilder.Entity("Newsy.Domain.Entities.System.Source", b =>
+            modelBuilder.Entity("Newsy.Domain.Entities.Source", b =>
                 {
                     b.Navigation("Contents");
+                });
+
+            modelBuilder.Entity("Newsy.Domain.Entities.SourceFolder", b =>
+                {
+                    b.Navigation("Sources");
                 });
 #pragma warning restore 612, 618
         }

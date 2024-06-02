@@ -1,3 +1,51 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Sources</h1>
+
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <source-editor-popup title="Create new RSS" buttonClass="btn btn-sm btn-outline-success me-2" (sourceSaved)="refresh()"/>
+    </div>
 </div>
+
+@if(sources$ | async; as sources){
+<div class="table-responsive small">
+    <table class="table table-striped table-sm">
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Id</th>
+                <th scope="col">Type</th>
+                <th scope="col">Content</th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (source of sources; track $index) {
+            <tr>
+                <td>{{ source.name }}</td>
+                <td>{{ source.id }}</td>
+                <td>{{ source.type }}</td>
+                <td>{{ source.content }}</td>
+                <td>
+                    <button type="button" class="btn btn-outline-primary btn-sm py-0 me-2" (click)="scrape(source.id)">
+                        <i class="bi bi-binoculars"></i> 
+                        Scrape
+                    </button>
+
+                    <source-editor-popup title="Edit" icon="bi bi-pencil" 
+                        buttonClass="btn btn-sm btn-outline-success py-0 me-2" 
+                        [sourceId]="source.id"
+                        [sourceName]="source.name"
+                        [sourceRss]="source.content" 
+                        (sourceSaved)="refresh()"/>
+
+                    <button type="button" class="btn btn-outline-danger btn-sm py-0" (click)="remove(source.id)">
+                        <i class="bi bi-trash"></i>
+                        Remove
+                    </button>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+}

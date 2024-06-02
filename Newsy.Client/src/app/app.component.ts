@@ -1,13 +1,13 @@
 import { Component, inject, TemplateRef } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { MenuComponent } from './menu/menu.component';
+import { ToastComponent } from './core/components/toast/toast.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, DashboardComponent, MenuComponent],
+  imports: [RouterOutlet, RouterLink, MenuComponent, ToastComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
