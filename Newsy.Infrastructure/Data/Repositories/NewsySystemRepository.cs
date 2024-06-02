@@ -45,6 +45,7 @@ internal class NewsySystemRepository(ApplicationDbContext applicationDbContext) 
     public IEnumerable<Content> GetContentsByIds(List<Guid> contentIds)
     {
         var contents = applicationDbContext.Contents
+                                           .Include(x => x.Tags)
                                            .Where(x => contentIds.Contains(x.Id));
         return contents;
     }

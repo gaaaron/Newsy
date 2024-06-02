@@ -9,10 +9,13 @@ internal class ContentCreatedEventHandler(INewsySystemRepository newsySystemRepo
     public async Task Handle(ContentCreatedEvent notification, CancellationToken cancellationToken)
     {
         var nrContents = newsySystemRepository.GetContentsByIds(notification.ContentIds);
+        var tags = newsySystemRepository.GetAllTags();
         foreach (var content in nrContents.Where(x => x.SourceId is not null))
         {
-            var sourceTag = newsySystemRepository.GetSourceTagBySourceId(content.SourceId!.Value);
-            sourceTag?.Attach(content);
+            foreach (var tag in tags) 
+            { 
+                tag.Attach(content);
+            }
         }
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
