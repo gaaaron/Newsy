@@ -56,18 +56,13 @@ internal class ApplicationDbContextInitializer(ILogger<ApplicationDbContextIniti
         // Seed, if necessary
         if (!context.Sources.Any())
         {
-            var sourceFolder = new SourceFolder(Guid.Parse("D6012FA7-C9EC-490C-BC0F-48E2295D2450"), null, "Külföldi oldalak");
+            var sourceFolder = SourceFolder.Create(null, "Külföldi oldalak");
             context.Set<SourceFolder>().Add(sourceFolder);
 
-            var bbcRss = new RssSource(Guid.Parse("01605e68-6670-499d-a01b-b963067a9e36"), "BBC", 
-                sourceFolder.Id, RssUrl.Create("https://feeds.bbci.co.uk/news/rss.xml"), DateTime.Today.AddDays(-1));
+            var bbcRss = RssSource.Create("BBC", sourceFolder.Id, "https://feeds.bbci.co.uk/news/rss.xml");
             context.Sources.Add(bbcRss);
 
-            var tag = new SourceTag(Guid.Parse("130a1e32-d640-43dd-a96c-aace796bc0e0"), "BBC", bbcRss.Id);
-            context.Tags.Add(tag);
-
-            var feed = new Feed(Guid.Parse("149725e1-26e7-4e8d-a662-cf27eb6d8767"), "Hírek");
-            feed.IncludeTag(tag.Id);
+            var feed = Feed.Create("Hírek");
             context.Feeds.Add(feed);
 
             await context.SaveChangesAsync();

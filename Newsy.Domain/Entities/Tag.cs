@@ -10,9 +10,19 @@ public abstract class Tag(Guid Id, string Name) : Entity(Id)
     public abstract bool Attach(Content content);
 }
 
-public class SourceTag(Guid Id, string Name, Guid SourceId) : Tag(Id, Name)
+public class SourceTag : Tag
 {
-    public Guid SourceId { get; set; } = SourceId;
+    protected SourceTag(Guid Id, string Name, Guid SourceId) : base(Id, Name)
+    {
+        this.SourceId = SourceId;
+    }
+
+    public static SourceTag Create(string Name, Guid SourceId)
+    {
+        return new SourceTag(Guid.NewGuid(), Name, SourceId);
+    }
+
+    public Guid SourceId { get; set; }
     public virtual Source Source { get; set; } = null!;
 
     public override bool Attach(Content content)

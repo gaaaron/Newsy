@@ -1,9 +1,19 @@
 ﻿using Newsy.Domain.Primitives;
 
 namespace Newsy.Domain.Entities;
-public class Feed(Guid Id, string Name) : Entity(Id)
+public class Feed : Entity
 {
-    public string Name { get; set; } = Name;
+    protected Feed(Guid Id, string Name) : base(Id)
+    {
+        this.Name = Name;
+    }
+
+    public static Feed Create(string Name)
+    {
+        return new Feed(Guid.NewGuid(), Name);
+    }
+
+    public string Name { get; set; }
     public List<FeedRule> Rules { get; set; } = [];
 
     public void IncludeTag(Guid tagId)

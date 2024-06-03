@@ -3,10 +3,24 @@ using Newsy.Domain.ValueObjects;
 
 namespace Newsy.Domain.Entities;
 
-public class RssSource(Guid Id, string Name, Guid SourceFolderId, RssUrl RssUrl, DateTime? lastScraped) :
-    Source(Id, Name, SourceFolderId, lastScraped)
+public class RssSource : Source
 {
-    public RssUrl RssUrl { get; set; } = RssUrl;
+    protected RssSource(Guid Id, string Name, Guid SourceFolderId, RssUrl RssUrl, DateTime? lastScraped) : 
+        base(Id, Name, SourceFolderId, lastScraped)
+    {
+        this.RssUrl = RssUrl;
+    }
+
+    public static RssSource Create(string Name, Guid SourceFolderId, string RssUrl)
+    {
+        var source = new RssSource(Guid.NewGuid(), Name, SourceFolderId, 
+            ValueObjects.RssUrl.Create(RssUrl), DateTime.Today.AddDays(-1));
+
+        source.RaiseDomainEvent(new SourceCreatedEvent(source.Id, Name));
+        return source;
+    }
+
+    public RssUrl RssUrl { get; set; }
 
     public void AddContent(IEnumerable<RssScrapeData> items)
     {
@@ -18,7 +32,7 @@ public class RssSource(Guid Id, string Name, Guid SourceFolderId, RssUrl RssUrl,
         var ids = new List<Guid>();
         foreach (var item in items)
         {
-            var content = new RssContent(Guid.NewGuid(), Id, item.Link, item.ExternalId, item.Published, item.Title, item.Description);
+            var content = RssContent.Create(Id, item.Link, item.ExternalId, item.Published, item.Title, item.Description);
             Contents.Add(content);
 
             ids.Add(content.Id);
@@ -34,6 +48,7 @@ public class RssSource(Guid Id, string Name, Guid SourceFolderId, RssUrl RssUrl,
         RssUrl = RssUrl.Create(rssUrl);
         RaiseDomainEvent(new SourceUpdatedEvent(Id, Name));
     }
+
 }
 
 public record RssScrapeData(string ExternalId, string Title, string Description, string Link, DateTime Published);

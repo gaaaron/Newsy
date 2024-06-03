@@ -12,7 +12,7 @@ internal sealed class CreateFeedCommandHandler(
         if (feed is not null)
             return new CreateFeedResponse(feed.Id);
 
-        feed = new Domain.Entities.Feed(Guid.NewGuid(), request.Name);
+        feed = Domain.Entities.Feed.Create(request.Name);
         systemRepository.InsertFeed(feed);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);

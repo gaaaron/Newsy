@@ -12,12 +12,23 @@ public abstract class Content(Guid Id, Guid? SourceId, string ConcreteSource, st
     public abstract string GetContent();
 }
 
-public class RssContent(Guid Id, Guid? SourceId, string ConcreteSource, string ExternalId, 
-    DateTime Published, string Title, string Description) :
-    Content(Id, SourceId, ConcreteSource, ExternalId, Published)
+public class RssContent : Content
 {
-    public string Title { get; set; } = Title;
-    public string Description { get; set; } = Description;
+    protected RssContent(Guid Id, Guid? SourceId, string ConcreteSource, string ExternalId,
+        DateTime Published, string Title, string Description) : base(Id, SourceId, ConcreteSource, ExternalId, Published)
+    {
+        this.Title = Title;
+        this.Description = Description;
+    }
+
+    public static RssContent Create(Guid? SourceId, string ConcreteSource, string ExternalId,
+        DateTime Published, string Title, string Description)
+    {
+        return new RssContent(Guid.NewGuid(), SourceId, ConcreteSource, ExternalId, Published, Title, Description);
+    }
+
+    public string Title { get; set; }
+    public string Description { get; set; }
 
     public override string GetContent()
     {

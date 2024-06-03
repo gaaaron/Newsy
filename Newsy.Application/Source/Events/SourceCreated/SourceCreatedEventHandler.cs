@@ -9,7 +9,7 @@ internal class SourceCreatedEventHandler(INewsySystemRepository newsySystemRepos
 {
     public async Task Handle(SourceCreatedEvent notification, CancellationToken cancellationToken)
     {
-        var tag = new SourceTag(Guid.NewGuid(), notification.Name, notification.SourceId);
+        var tag = SourceTag.Create(notification.Name, notification.SourceId);
         newsySystemRepository.InsertSourceTag(tag);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
