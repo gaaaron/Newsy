@@ -19,3 +19,11 @@ internal class SourceTagConfiguration : IEntityTypeConfiguration<SourceTag>
         builder.HasOne(x => x.Source).WithOne().HasForeignKey<SourceTag>(x => x.SourceId);
     }
 }
+
+internal class ContainsTagConfiguration : IEntityTypeConfiguration<ContainsTag>
+{
+    public void Configure(EntityTypeBuilder<ContainsTag> builder)
+    {
+        builder.HasBaseType<Tag>();
+    }
+}

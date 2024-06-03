@@ -12,11 +12,13 @@ public interface INewsySystemRepository
 
     // CONTENT
     IEnumerable<Content> GetContentsByIds(List<Guid> contentIds);
+    IEnumerable<Content> GetAllContents();
 
     // TAG
     IEnumerable<Tag> GetAllTags();
+    Tag? GetTag(Guid tagId);
     SourceTag? GetSourceTagBySourceId(Guid sourceId);
-    void InsertSourceTag(SourceTag tag);
+    void InsertTag(Tag tag);
 
     // FEED
     Feed? GetFeedByName(string name);

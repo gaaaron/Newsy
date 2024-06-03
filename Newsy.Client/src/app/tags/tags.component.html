@@ -1,5 +1,9 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Tags</h1>
+
+    <div class="btn-toolbar mb-2 mb-md-0">
+        <app-tag-creator-popup (tagCreated)="refresh()" />
+    </div>
 </div>
 
 @if(tags$ | async; as tags){

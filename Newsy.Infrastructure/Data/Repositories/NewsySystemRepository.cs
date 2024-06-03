@@ -50,9 +50,19 @@ internal class NewsySystemRepository(ApplicationDbContext applicationDbContext) 
         return contents;
     }
 
+    public IEnumerable<Content> GetAllContents()
+    {
+        return applicationDbContext.Contents.Include(x => x.Tags).ToList();
+    }
+
     public IEnumerable<Tag> GetAllTags()
     {
         return applicationDbContext.Tags.ToList();
+    }
+
+    public Tag? GetTag(Guid tagId)
+    {
+        return applicationDbContext.Tags.FirstOrDefault(x => x.Id == tagId);
     }
 
     public SourceTag? GetSourceTagBySourceId(Guid sourceId)
@@ -60,7 +70,7 @@ internal class NewsySystemRepository(ApplicationDbContext applicationDbContext) 
         return applicationDbContext.Tags.OfType<SourceTag>().FirstOrDefault(x => x.SourceId == sourceId);
     }
 
-    public void InsertSourceTag(SourceTag tag)
+    public void InsertTag(Tag tag)
     {
         applicationDbContext.Tags.Add(tag);
     }

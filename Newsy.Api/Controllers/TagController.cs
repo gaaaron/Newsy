@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Newsy.Application.Tag.Command.CreateContainsTag;
 using Newsy.Application.Tag.Queries.GetAll;
 
 namespace Newsy.Api.Controllers;
@@ -12,5 +13,11 @@ public class TagController(IMediator sender) : ControllerBase
     public IAsyncEnumerable<TagDto> GetAll()
     {
         return sender.CreateStream(new GetAllTagsQuery());
+    }
+
+    [HttpPost]
+    public Task<Guid> CreateContainsTag(CreateContainsTagCommand command)
+    {
+        return sender.Send(command);
     }
 }

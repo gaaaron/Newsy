@@ -11,4 +11,8 @@ export class TagService {
   getAll(): Observable<Tag[]> {
     return this.http.get<Tag[]>(`/api/Tag/GetAll`);
   }
+
+  createContainsTag(tag: { name: string, textToMatch: string }): Observable<string> {
+    return this.http.post<string>('/api/Tag/CreateContainsTag', tag); 
+  }
 }

@@ -19,7 +19,9 @@ public class SourceTag : Tag
 
     public static SourceTag Create(string Name, Guid SourceId)
     {
-        return new SourceTag(Guid.NewGuid(), Name, SourceId);
+        var tag = new SourceTag(Guid.NewGuid(), Name, SourceId);
+        tag.RaiseDomainEvent(new TagCreatedEvent(tag.Id, tag.Name));
+        return tag;
     }
 
     public Guid SourceId { get; set; }
@@ -28,6 +30,33 @@ public class SourceTag : Tag
     public override bool Attach(Content content)
     {
         if (content.SourceId != SourceId)
+            return false;
+
+        content.Tags.Add(this);
+        RaiseDomainEvent(new TagsAttachedEvent(Id, content.Id));
+        return true;
+    }
+}
+
+public class ContainsTag : Tag
+{
+    protected ContainsTag(Guid Id, string Name, string TextToMatch) : base(Id, Name)
+    {
+        this.TextToMatch = TextToMatch;
+    }
+
+    public static ContainsTag Create(string Name, string TextToMatch)
+    {
+        var tag = new ContainsTag(Guid.NewGuid(), Name, TextToMatch);
+        tag.RaiseDomainEvent(new TagCreatedEvent(tag.Id, tag.Name));
+        return tag;
+    }
+
+    public string TextToMatch { get; set; }
+
+    public override bool Attach(Content content)
+    {
+        if (!content.GetContent().Contains(TextToMatch))
             return false;
 
         content.Tags.Add(this);

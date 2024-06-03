@@ -2,7 +2,6 @@ import { Component, EventEmitter, Input, Output, TemplateRef } from '@angular/co
 import { FeedService } from '../../core/services/feed.service';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormsModule } from '@angular/forms';
-import { Observable } from 'rxjs';
 import { FeedTag } from '../../core/models/feed_tag';
 import { AsyncPipe } from '@angular/common';
 import { UpdateFeedTags } from '../../core/models/update_feed_tags';
