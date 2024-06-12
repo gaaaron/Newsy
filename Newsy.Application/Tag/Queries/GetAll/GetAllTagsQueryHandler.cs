@@ -14,7 +14,7 @@ internal class GetAllTagsQueryHandler(IApplicationDbContext applicationDbContext
             if (cancellationToken.IsCancellationRequested)
                 yield break;
 
-            yield return new TagDto(tag.Id, tag.Name, tag.GetType().Name);
+            yield return new TagDto(tag.Id, tag.Name, tag.GetType().Name, tag.GetContent());
         }
     }
 }

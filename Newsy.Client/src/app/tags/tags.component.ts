@@ -25,7 +25,14 @@ export class TagsComponent {
   }
 
   async edit(tag:Tag) : Promise<void> {
-    let result = await this.editorService.show(tag, [new EditorMeta('name', 'Név', 'text')]);
+    let result = await this.editorService.show(tag, [
+      new EditorMeta('name', 'Name', 'text'), 
+      new EditorMeta('content', 'Text to match', 'text')]);
+
+    if (result) {
+      this.tagService.updateContainsTag({id: tag.id, name: tag.name, textToMatch: tag.content })
+                     .subscribe(_ => this.refresh());
+    }
   }
 
   async createContainsTag() : Promise<void> {

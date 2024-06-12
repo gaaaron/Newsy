@@ -17,6 +17,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Id</th>
                     <th scope="col">Type</th>
+                    <th scope="col">Content</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
@@ -26,11 +27,14 @@
                         <td>{{ tag.name }}</td>
                         <td>{{ tag.id }}</td>
                         <td>{{ tag.type }}</td>
+                        <td>{{ tag.content }}</td>
                         <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm py-0 me-2" (click)="edit(tag)">
-                                <i class="bi bi-pencil"></i> 
-                                Edit
-                            </button>
+                            @if(tag.content != '') {
+                                <button type="button" class="btn btn-outline-primary btn-sm py-0 me-2" (click)="edit(tag)">
+                                    <i class="bi bi-pencil"></i> 
+                                    Edit
+                                </button>
+                            }
                         </td>
                     </tr>
                 }

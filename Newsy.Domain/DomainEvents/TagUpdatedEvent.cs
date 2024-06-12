@@ -2,4 +2,4 @@
 
 namespace Newsy.Domain.DomainEvents;
 
-public record TagCreatedEvent(Guid TagId, string Name) : IDomainEvent;
+public record TagUpdatedEvent(Guid TagId, string Name) : IDomainEvent;

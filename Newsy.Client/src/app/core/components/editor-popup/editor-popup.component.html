@@ -8,7 +8,7 @@
             <div class="mb-3">
                 @for (item of meta; track $index) {
                     <label for="{{item.key}}">{{item.title}}</label>
-                    <input id="{{item.key}}" name="{{item.key}}" class="form-control" type="{{item.dataType}}" [(ngModel)]="data[item.key]"  />                    
+                    <input id="{{item.key}}" name="{{item.key}}" class="form-control mb-3" type="{{item.dataType}}" [(ngModel)]="data[item.key]"  />                    
                 }
             </div>
         </form>

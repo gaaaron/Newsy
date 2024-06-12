@@ -12,7 +12,7 @@ internal class SourceUpdatedEventHandler(INewsySystemRepository newsySystemRepos
         var tag = newsySystemRepository.GetSourceTagBySourceId(notification.SourceId);
         Guard.NotFound(tag);
 
-        tag!.Name = notification.Name;
+        tag!.Update(notification.Name);
 
         await unitOfWork.SaveChangesAsync(cancellationToken);
     }

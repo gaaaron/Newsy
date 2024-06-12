@@ -15,4 +15,8 @@ export class TagService {
   createContainsTag(tag: { name: string, textToMatch: string }): Observable<string> {
     return this.http.post<string>('/api/Tag/CreateContainsTag', tag); 
   }
+
+  updateContainsTag(tag: { id: string, name: string, textToMatch: string }): Observable<string> {
+    return this.http.post<string>('/api/Tag/UpdateContainsTag', tag); 
+  }
 }
