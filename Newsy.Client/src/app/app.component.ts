@@ -3,11 +3,12 @@ import { RouterLink, RouterOutlet } from '@angular/router';
 import { NgbOffcanvas } from '@ng-bootstrap/ng-bootstrap';
 import { MenuComponent } from './menu/menu.component';
 import { ToastComponent } from './core/components/toast/toast.component';
+import { EditorPopupComponent } from './core/components/editor-popup/editor-popup.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, MenuComponent, ToastComponent],
+  imports: [RouterOutlet, RouterLink, MenuComponent, ToastComponent, EditorPopupComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

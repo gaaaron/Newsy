@@ -3,9 +3,9 @@ export class CreateOrdEditRssSource {
     name: string;
     rssUrl: string;
 
-    constructor(id: string|null, name: string, content: string) {
+    constructor(id: string|null, name: string, rssUrl: string) {
         this.id = id;
         this.name = name;
-        this.rssUrl = content;
+        this.rssUrl = rssUrl;
     }
 }

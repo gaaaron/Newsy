@@ -2,7 +2,10 @@
     <h1 class="h2">Tags</h1>
 
     <div class="btn-toolbar mb-2 mb-md-0">
-        <app-tag-creator-popup (tagCreated)="refresh()" />
+        <button type="button" class="btn btn-sm btn-outline-success me-2" (click)="createContainsTag()">
+            <i class="bi bi-plus"></i> 
+            Create contains tag
+        </button>
     </div>
 </div>
 
@@ -14,6 +17,7 @@
                     <th scope="col">Name</th>
                     <th scope="col">Id</th>
                     <th scope="col">Type</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
@@ -22,6 +26,12 @@
                         <td>{{ tag.name }}</td>
                         <td>{{ tag.id }}</td>
                         <td>{{ tag.type }}</td>
+                        <td>
+                            <button type="button" class="btn btn-outline-primary btn-sm py-0 me-2" (click)="edit(tag)">
+                                <i class="bi bi-pencil"></i> 
+                                Edit
+                            </button>
+                        </td>
                     </tr>
                 }
             </tbody>

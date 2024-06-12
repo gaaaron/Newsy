@@ -18,7 +18,10 @@
 <h6
     class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-body-secondary text-uppercase">
     <span>Feeds</span>
-    <app-feed-creator-popup (feedCreated)="refresh()" />
+
+    <a class="link-secondary" aria-label="Add a new feed" (click)="createFeed()">
+        <i class="bi bi-plus-circle"></i>
+    </a>
 </h6>
 @if(feeds$ | async; as feeds){
 <ul class="nav flex-column mb-auto">
